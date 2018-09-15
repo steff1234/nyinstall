@@ -289,7 +289,7 @@ EOF
 #######################################################################
 ## Filebot Command til Qbittorrent
 cat >> /home/$USER/scripts/FileBot-Commad <<EOF
-filebot -script fn:amc --output "/home/DIT-USER-NAME/mnt/media" --action copy --conflict auto -non-strict --log-file "/home/DIT-USER-NAME/scripts/logs/filebot-amc.log" --def unsorted=y music=y artwork=n plex="localhost:NPLEXTOKEN" "ut_dir=%F" "ut_kind=multi" "ut_title=%N" "ut_label=%L" --def movieFormat="{vf == /2160p/ ? 'Movies 4K' : vf =~ /1080p|720p/ ? 'movies' : 'movies'}/{'da' in Audio.Language ? 'Dansk' : 'Engelsk'}/{n}/{n.space('.')}.{y}{'.'+source}.{vc}{'.'+lang}" seriesFormat="{n.replaceTrailingBrackets()}{vf == /2160p/ ? 'Tv 4K' : vf =~ /1080p|720p/ ? 'tv' : 'tv'}/{'da' in Audio.Language ? 'Dansk' : 'Engelsk'}/{n}/{'Season '+s}/{n} - {s00e00} - {t}{'.'+lang}"
+filebot -script fn:amc --lang da --output "/home/$USER/mnt/media" --action copy --conflict auto -non-strict --log-file "/home/$USER/scripts/logs/filebot-amc.log" --def unsorted=y music=y artwork=n plex="localhost:${PLEXTOKEN}" "ut_dir=%F" "ut_kind=multi" "ut_title=%N" "ut_label=%L" --def movieFormat="{vf == /2160p/ ? 'Movies 4K' : vf =~ /1080p|720p/ ? 'movies' : 'movies'}/{Languages.toString().contains('da') || audioLanguages.toString().contains('da')? 'Dansk' : 'Engelsk'}/{n}/{n.space('.')}.{y}{'.'+source}.{vc}{'.'+lang}" seriesFormat="{vf == /2160p/ ? 'Tv 4K' : vf =~ /1080p|720p/ ? 'tv' : 'tv'}/{Languages.toString().contains('da') || audioLanguages.toString().contains('da')? 'Dansk' : 'Engelsk'}/{n}/{'Season '+s}/{n} - {s00e00} - {t}{'.'+lang}"
 EOF
 #####
 ### start rclone Mount
