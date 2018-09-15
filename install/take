@@ -7,26 +7,26 @@
 
 distribution=`grep DISTRIB_ID /etc/*-release | awk -F '=' '{print $2}'`
 function _Materepo() {
-if [[ $distribution == Ubuntu ]]; then
+  if [[ $distribution == Ubuntu ]]; then
     apt-get -y install software-properties-common
     add-apt-repository ppa:ubuntu-mate-dev/xenial-mate -y
     add-apt-repository ppa:notepadqq-team/notepadqq -y
     add-apt-repository ppa:qbittorrent-team/qbittorrent-stable -y
     apt -y update
     apt -y upgrade
-fi
+  fi
 }
 _MateDesktop() {
-        _Materepo
-        echo "Installer Mate Desktop"
-            apt -y install mate
-            apt -y install dist-upgrade
-            apt -y install chromium-browser
-            apt -y install notepadqq
-            apt -y install qbittorrent
-            wget https://download.nomachine.com/download/6.2/Linux/nomachine_6.2.4_1_amd64.deb
-            dpkg -i nomachine_6.2.4_1_amd64.deb
-            rm nomachine*.deb
+  _Materepo
+  echo "Installer Mate Desktop"
+  apt -y install mate
+  apt -y install dist-upgrade
+  apt -y install chromium-browser
+  apt -y install notepadqq
+  apt -y install qbittorrent
+  wget https://download.nomachine.com/download/6.2/Linux/nomachine_6.2.4_1_amd64.deb
+  dpkg -i nomachine_6.2.4_1_amd64.deb
+  rm nomachine*.deb
 
 }
 
@@ -34,18 +34,18 @@ function _Install-Mate() {
   echo "Install Mate Desktop?"
 
   select DESKTOP in "Yes" "No"; do
-  	case $DESKTOP in
-   Yes)
-  		echo "Installer Mate Desktop | Tager noget tid" && _MateDesktop >/dev/null 2>&1;
-      break;
-      ;;
-    No)
-      echo "No"
-      break;
-      ;;
-     *)
-      echo "Yes Or No!!!"
-      ;;
+    case $DESKTOP in
+      Yes)
+        echo "Installer Mate Desktop | Tager noget tid" && _MateDesktop >/dev/null 2>&1;
+        break;
+        ;;
+      No)
+        echo "No"
+        break;
+        ;;
+      *)
+        echo "Yes Or No!!!"
+        ;;
     esac
   done
 }
@@ -55,10 +55,10 @@ function _Install-Mate() {
 ######
 function _FileBot() {
   echo "Installer Filebot"
-    wget https://get.filebot.net/filebot/FileBot_4.8.2/FileBot_4.8.2_amd64.deb
-    dpkg -i FileBot_4.8.2_amd64.deb
-    apt -y install mediainfo
-    rm FileBot_4.8.2_amd64.deb
+  wget https://get.filebot.net/filebot/FileBot_4.8.2/FileBot_4.8.2_amd64.deb
+  dpkg -i FileBot_4.8.2_amd64.deb
+  apt -y install mediainfo
+  rm FileBot_4.8.2_amd64.deb
   echo "FileBot installert"
 
 }
@@ -69,43 +69,43 @@ function _Install-FileBot() {
   echo "Install FileBot?"
 
   select FileBot in "Yes" "No"; do
-  	case $FileBot in
-   Yes)
-  	  echo "Installer FileBot" && _FileBot >/dev/null 2>&1;
-      break;
-      ;;
-    No)
-      echo "No"
-      break;
-      ;;
-     *)
-      echo "Yes Or No!!!"
-      ;;
+    case $FileBot in
+      Yes)
+        echo "Installer FileBot" && _FileBot >/dev/null 2>&1;
+        break;
+        ;;
+      No)
+        echo "No"
+        break;
+        ;;
+      *)
+        echo "Yes Or No!!!"
+        ;;
     esac
   done
 }
 _TOKENPLEX() {
-echo "Ind set PlexToken I Qbittorretn til FileBot?"
-select PLEXT in "Yes" "No"; do
-  case $PLEXT in
-    Yes)
-       echo "PlexToken To Qbittorrent"; read -p 'Indset PlexToken; ' PLEXTOKEN && _QbitFileBot;
-       break;
-       ;;
-    No)
-       echo "Arrrg"
-       break;
-       ;;
-     *)
-       echo "Yes Or No"
-       break;
-       ;;
+  echo "Ind set PlexToken I Qbittorretn til FileBot?"
+  select PLEXT in "Yes" "No"; do
+    case $PLEXT in
+      Yes)
+        echo "PlexToken To Qbittorrent"; read -p 'Indset PlexToken; ' PLEXTOKEN && _QbitFileBot;
+        break;
+        ;;
+      No)
+        echo "Arrrg"
+        break;
+        ;;
+      *)
+        echo "Yes Or No"
+        break;
+        ;;
 
-  esac
-done
+    esac
+  done
 }
 _QbitFileBot() {
-cat >> /home/$USER/.config/qBittorrent/qBittorrent.conf <<EOF
+  cat >> /home/$USER/.config/qBittorrent/qBittorrent.conf <<EOF
 [Application]
 FileLogger\\Age=1
 FileLogger\\AgeType=1

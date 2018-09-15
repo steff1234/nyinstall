@@ -5,10 +5,10 @@
 ### Root to install
 #####
 if [ "$(whoami &2>/dev/null)" != "root" ] && [ "$(id -un &2>/dev/null)" != "root" ]
-      then
-      echo "You must be root to run this script!"
-      echo "use 'sudo !!'"
-      exit 1
+then
+  echo "You must be root to run this script!"
+  echo "use 'sudo !!'"
+  exit 1
 fi
 #####
 ### Set UserName
@@ -41,76 +41,76 @@ sudo -u $USER mkdir -p /home/$USER/.config/qBittorrent/ >/dev/null 2>&1
 #####
 
 function shift_backups {
-        for num in $(seq $KEEP_OLD -1 1) ; do
-                old_backup="$file.bak$num"
-                if [[ -e $old_backup && $num == $KEEP_OLD ]] ; then
-                                echo "    removing oldest file ($old_backup)" >/dev/null 2>&1
-                                rm -f $old_backup
-                elif [[ -e $old_backup ]] ; then
-                                new_name="$file.bak$(expr $num + 1)"
-                                echo "    moving $old_backup to $new_name" >/dev/null 2>&1
-                                mv $old_backup $new_name
-                fi
-        done
+  for num in $(seq $KEEP_OLD -1 1) ; do
+    old_backup="$file.bak$num"
+    if [[ -e $old_backup && $num == $KEEP_OLD ]] ; then
+      echo "    removing oldest file ($old_backup)" >/dev/null 2>&1
+      rm -f $old_backup
+    elif [[ -e $old_backup ]] ; then
+      new_name="$file.bak$(expr $num + 1)"
+      echo "    moving $old_backup to $new_name" >/dev/null 2>&1
+      mv $old_backup $new_name
+    fi
+  done
 }
 #####
 ### Backup Files
 #####
 for file in $FILE_LIST ; do
-        count=1
-        while [[ $count -le $KEEP_OLD ]] ; do
-                backup_file="$file.bak$count"
-                if [[ -e $backup_file ]] ; then
-                        echo "$backup_file exists, shifting backups" >/dev/null 2>&1
-                        shift_backups
-                        cp $file $backup_file >/dev/null 2>&1
-                        break
-                else
-                        cp $file $backup_file >/dev/null 2>&1
-                        break
-                fi
-                count=$(expr $count + 1)
-        done
+  count=1
+  while [[ $count -le $KEEP_OLD ]] ; do
+    backup_file="$file.bak$count"
+    if [[ -e $backup_file ]] ; then
+      echo "$backup_file exists, shifting backups" >/dev/null 2>&1
+      shift_backups
+      cp $file $backup_file >/dev/null 2>&1
+      break
+    else
+      cp $file $backup_file >/dev/null 2>&1
+      break
+    fi
+    count=$(expr $count + 1)
+  done
 done
 if [[ -f $FILE_LIST ]]; then
   rm $FILE_LIST
-    echo "Old files deleted"
+  echo "Old files deleted"
 fi
 clear
 #####
 ### Install Programs
 #####
 {
-if command -v curl >/dev/null 2>&1; then
+  if command -v curl >/dev/null 2>&1; then
     echo "Curl er Installert"
-else
-  echo "Installer curl"
-  sudo apt -y install curl >/dev/null 2>&1
-fi
-sleep 3
+  else
+    echo "Installer curl"
+    sudo apt -y install curl >/dev/null 2>&1
+  fi
+  sleep 3
 
-if command -v unzip >/dev/null 2>&1; then
+  if command -v unzip >/dev/null 2>&1; then
     echo "Unzip exists"
-else
-  echo "Installer unzip"
-  sudo apt -y install unzip >/dev/null 2>&1
+  else
+    echo "Installer unzip"
+    sudo apt -y install unzip >/dev/null 2>&1
 
-fi
-sleep 3
-if command -v fuser >/dev/null 2>&1; then
-  echo "Fuse exists"
-else
-  echo "Installer Fuse"
-  apt -y install fuse >/dev/null 2>&1
-fi
-sleep 3
-clear
-if command -v rclone >/dev/null 2>&1; then
+  fi
+  sleep 3
+  if command -v fuser >/dev/null 2>&1; then
+    echo "Fuse exists"
+  else
+    echo "Installer Fuse"
+    apt -y install fuse >/dev/null 2>&1
+  fi
+  sleep 3
+  clear
+  if command -v rclone >/dev/null 2>&1; then
     echo "Rclone exists"
-else
-  curl https://rclone.org/install.sh | sudo bash >/dev/null 2>&1;
-  echo "Installer Rclone"
-fi
+  else
+    curl https://rclone.org/install.sh | sudo bash >/dev/null 2>&1;
+    echo "Installer Rclone"
+  fi
 }
 clear
 sleep 3
