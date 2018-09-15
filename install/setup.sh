@@ -90,7 +90,7 @@ clear
   sleep 3
 
   if command -v unzip >/dev/null 2>&1; then
-    echo "Unzip exists"
+    echo "Unzip er Installeret"
   else
     echo "Installer unzip"
     sudo apt -y install unzip >/dev/null 2>&1
@@ -98,7 +98,7 @@ clear
   fi
   sleep 3
   if command -v fuser >/dev/null 2>&1; then
-    echo "Fuse exists"
+    echo "Fuse er Installeret"
   else
     echo "Installer Fuse"
     apt -y install fuse >/dev/null 2>&1
@@ -106,7 +106,7 @@ clear
   sleep 3
   clear
   if command -v rclone >/dev/null 2>&1; then
-    echo "Rclone exists"
+    echo "Rclone er Installeret"
   else
     curl https://rclone.org/install.sh | sudo bash >/dev/null 2>&1;
     echo "Installer Rclone"
