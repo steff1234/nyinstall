@@ -1,0 +1,214 @@
+#!/bin/bash
+
+
+######
+### Mate Qbittorrent notepad++ google-chromium NoMachine
+######
+
+distribution=`grep DISTRIB_ID /etc/*-release | awk -F '=' '{print $2}'`
+function _Materepo() {
+if [[ $distribution == Ubuntu ]]; then
+    apt-get -y install software-properties-common
+    add-apt-repository ppa:ubuntu-mate-dev/xenial-mate -y
+    add-apt-repository ppa:notepadqq-team/notepadqq -y
+    add-apt-repository ppa:qbittorrent-team/qbittorrent-stable -y
+    apt -y update
+    apt -y upgrade
+fi
+}
+_MateDesktop() {
+        _Materepo
+        echo "Installer Mate Desktop"
+            apt -y install mate
+            apt -y install dist-upgrade
+            apt -y install chromium-browser
+            apt -y install notepadqq
+            apt -y install qbittorrent
+            wget https://download.nomachine.com/download/6.2/Linux/nomachine_6.2.4_1_amd64.deb
+            dpkg -i nomachine_6.2.4_1_amd64.deb
+            rm nomachine*.deb
+
+}
+
+function _Install-Mate() {
+  echo "Install Mate Desktop?"
+
+  select DESKTOP in "Yes" "No"; do
+  	case $DESKTOP in
+   Yes)
+  		echo "Installer Mate Desktop | Tager noget tid" && _MateDesktop >/dev/null 2>&1;
+      break;
+      ;;
+    No)
+      echo "No"
+      break;
+      ;;
+     *)
+      echo "Yes Or No!!!"
+      ;;
+    esac
+  done
+}
+
+######
+### Filebot
+######
+function _FileBot() {
+  echo "Installer Filebot"
+    wget https://get.filebot.net/filebot/FileBot_4.8.2/FileBot_4.8.2_amd64.deb
+    dpkg -i FileBot_4.8.2_amd64.deb
+    apt -y install mediainfo
+    rm FileBot_4.8.2_amd64.deb
+  echo "FileBot installert"
+
+}
+######
+### Install Filebot
+######
+function _Install-FileBot() {
+  echo "Install FileBot?"
+
+  select FileBot in "Yes" "No"; do
+  	case $FileBot in
+   Yes)
+  	  echo "Installer FileBot" && _FileBot >/dev/null 2>&1;
+      break;
+      ;;
+    No)
+      echo "No"
+      break;
+      ;;
+     *)
+      echo "Yes Or No!!!"
+      ;;
+    esac
+  done
+}
+_TOKENPLEX() {
+echo "Ind set PlexToken I Qbittorretn til FileBot?"
+select PLEXT in "Yes" "No"; do
+  case $PLEXT in
+    Yes)
+       echo "PlexToken To Qbittorrent"; read -p 'Indset PlexToken; ' PLEXTOKEN && _QbitFileBot;
+       break;
+       ;;
+    No)
+       echo "Arrrg"
+       break;
+       ;;
+     *)
+       echo "Yes Or No"
+       break;
+       ;;
+
+  esac
+done
+}
+_QbitFileBot() {
+cat >> /home/$USER/.config/qBittorrent/qBittorrent.conf <<EOF
+[Application]
+FileLogger\\Age=1
+FileLogger\\AgeType=1
+FileLogger\\Backup=true
+FileLogger\\DeleteOld=true
+FileLogger\\Enabled=true
+FileLogger\\MaxSizeBytes=66560
+FileLogger\\Path=/home/$USER/.local/share/data/qBittorrent/logs
+
+[AutoRun]
+enabled=true
+program=filebot -script fn:amc --lang da --output "\"/home/$USER/mnt/media"\" --action copy --conflict auto -non-strict --log-file "\"/home/$USER/scripts/logs/filebot-amc.log"\" --def unsorted=y music=y artwork=n plex="\"localhost:${PLEXTOKEN}"\" "\"ut_dir=%F"\" "\"ut_kind=multi"\" "\"ut_title=%N"\" "\"ut_label=%L"\" --def movieFormat="\"{vf == /2160p/ ? 'Movies 4K' : vf =~ /1080p|720p/ ? 'movies' : 'movies'}/{Languages.toString().contains('da') || audioLanguages.toString().contains('da')? 'Dansk' : 'Engelsk'}/{n}/{n.space('.')}.{y}{'.'+source}.{vc}{'.'+lang}"\" seriesFormat="\"{vf == /2160p/ ? 'Tv 4K' : vf =~ /1080p|720p/ ? 'tv' : 'tv'}/{Languages.toString().contains('da') || audioLanguages.toString().contains('da')? 'Dansk' : 'Engelsk'}/{n}/{'Season '+s}/{n} - {s00e00} - {t}{'.'+lang}"\"
+
+[BitTorrent]
+Session\\CreateTorrentSubfolder=true
+Session\\DisableAutoTMMByDefault=false
+Session\\DisableAutoTMMTriggers\\CategoryChanged=false
+Session\\DisableAutoTMMTriggers\\CategorySavePathChanged=true
+Session\\DisableAutoTMMTriggers\\DefaultSavePathChanged=true
+
+[Core]
+AutoDeleteAddedTorrentFile=Never
+
+[GUI]
+Log\\Enabled=false
+Notifications\\DownloadTrackerFavicon=true
+Notifications\\Enabled=true
+Notifications\\TorrentAdded=false
+
+[LegalNotice]
+Accepted=true
+
+[Preferences]
+Advanced\\DisableRecursiveDownload=false
+Advanced\\RecheckOnCompletion=false
+Advanced\\TrayIconStyle=0
+Advanced\\confirmRemoveAllTags=true
+Advanced\\confirmTorrentDeletion=true
+Advanced\\confirmTorrentRecheck=true
+Advanced\\trackerPort=9000
+Advanced\\useSystemIconTheme=true
+Bittorrent\\AddTrackers=false
+Bittorrent\\MaxRatioAction=0
+Bittorrent\\PeX=true
+Connection\\GlobalDLLimitAlt=10
+Connection\\GlobalUPLimitAlt=10
+Connection\\InterfaceName=
+Connection\\ResolvePeerCountries=true
+Connection\\ResolvePeerHostNames=false
+Downloads\\DblClOnTorDl=0
+Downloads\\DblClOnTorFn=1
+Downloads\\NewAdditionDialog=true
+Downloads\\NewAdditionDialogFront=true
+Downloads\\PreAllocation=false
+Downloads\\ScanDirsV2=@Variant(\\0\\0\\0\\x1c\\0\\0\\0\\0)
+Downloads\\StartInPause=false
+General\\AlternatingRowColors=true
+General\\CloseToTray=true
+General\\CloseToTrayNotified=true
+General\\ExitConfirm=true
+General\\HideZeroComboValues=0
+General\\HideZeroValues=false
+General\\Locale=da
+General\\MinimizeToTray=false
+General\\NoSplashScreen=true
+General\\PreventFromSuspendWhenDownloading=false
+General\\PreventFromSuspendWhenSeeding=false
+General\\StartMinimized=false
+General\\SystrayEnabled=true
+General\\UseRandomPort=false
+MailNotification\\email=
+MailNotification\\enabled=false
+MailNotification\\password=
+MailNotification\\req_auth=false
+MailNotification\\req_ssl=false
+MailNotification\\sender=qBittorrent_notification@example.com
+MailNotification\\smtp_server=smtp.changeme.com
+MailNotification\\username=
+Scheduler\\days=0
+Scheduler\\end_time=@Variant(\\0\\0\\0\\xf\\x4J\\xa2\\0)
+Scheduler\\start_time=@Variant(\\0\\0\\0\\xf\\x1\\xb7t\\0)
+State\\hSplitterSizes=121, 632
+State\\size=@Size(779 591)
+WebUI\\Enabled=false
+
+[RSS]
+AutoDownloader\\SmartEpisodeFilter=s(\\d+)e(\\d+), (\\d+)x(\\d+), "(\\d{4}[.\\-]\\d{1,2}[.\\-]\\d{1,2})", "(\\d{1,2}[.\\-]\\d{1,2}[.\\-]\\d{4})"
+
+[ShutdownConfirmDlg]
+DontConfirmAutoExit=false
+EOF
+}
+#####
+### MergerFs
+#####
+function _MERGERSF() {
+  echo "Install MergerFs"
+  wget https://github.com/trapexit/mergerfs/releases/download/2.24.2/mergerfs_2.24.2.ubuntu-xenial_amd64.deb
+  dpkg -i mergerfs_2.24.2.ubuntu-xenial_amd64.deb
+  rm mergerfs*.deb
+  echo "Done"
+
+}
+#####
+### FINISHED
+#####
